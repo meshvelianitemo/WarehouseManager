@@ -1,7 +1,9 @@
+using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WarehouseManager.Application;
 using WarehouseManager.Infrastructure;
-using DotNetEnv;
-using Serilog;
+using WarehouseManager.Infrastructure.Persistance;
 
 
 Env.Load();
@@ -21,6 +23,9 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddApplication()
     .AddInfrastructure();
+
+builder.Services.AddDbContext<WmsDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Host.UseSerilog((context, config) =>
     config.ReadFrom.Configuration(context.Configuration));
