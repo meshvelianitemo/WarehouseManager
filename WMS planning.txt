@@ -1,0 +1,138 @@
+Features I'd implement in this order
+Phase 1 — Foundation
+Authentication
+Authorization
+Roles
+Users
+Logging
+Global exception handling
+FluentValidation
+EF Core
+SQL Server
+Migrations
+
+At this point, you're building the platform everything else will sit on.
+
+Phase 2 — Master Data
+Products
+Categories
+Suppliers
+Warehouses
+Locations
+
+No inventory yet.
+
+Just the entities.
+
+Phase 3 — Inventory
+
+This is where the project starts feeling like a WMS.
+
+Inventory
+Inventory Transactions
+Stock lookup
+Receive stock
+Ship stock
+Manual adjustment
+Phase 4 — Purchase Orders
+Create PO
+Add items
+Receive against PO
+Phase 5 — Sales Orders
+Create orders
+Pick inventory
+Ship products
+Phase 6 — Barcode System
+Generate barcodes
+Scan products
+Scan locations
+Scan pallets
+Phase 7 — Documents
+Upload
+Download
+Attach to shipments
+Attach to pallets
+Attach to products
+Phase 8 — Reports
+Inventory report
+Movement history
+Receiving report
+Sales report
+Export PDF
+Export Excel
+Phase 9 — Dashboard
+
+React shines here.
+
+KPIs
+Charts
+Low stock
+Today's shipments
+Open purchase orders
+Things I'd set up immediately
+
+These are worth doing before writing your first feature:
+
+Clean Architecture solution structure
+EF Core
+SQL Server
+Dependency Injection
+FluentValidation
+MediatR
+Serilog
+Global exception middleware
+JWT authentication
+AutoMapper or Mapster (I lean toward Mapster for new projects)
+Repository pattern only if it genuinely adds value (don't force it everywhere)
+Unit of Work if you find you need to coordinate multiple repositories in a transaction
+Logging
+
+I'd configure Serilog from day one.
+
+Use:
+
+Console
+Seq
+Rolling file logs
+
+This will save you hours when debugging.
+
+File Storage
+
+Even if document uploads come later, define an abstraction now:
+
+public interface IFileStorageService
+{
+    Task<string> UploadAsync(Stream stream, string fileName);
+    Task DeleteAsync(string path);
+}
+
+Initially it can save files locally.
+
+Later you can switch to:
+
+Azure Blob Storage
+Amazon S3
+MinIO
+
+without changing the application layer.
+
+One thing I think will make this project stand out
+
+Most portfolio WMS projects stop at CRUD.
+
+I'd build yours around workflows.
+
+Instead of:
+
+Create Product
+Edit Product
+
+focus on business operations like:
+
+Receive Shipment
+Transfer Inventory
+Perform Cycle Count
+Pick Sales Order
+Ship Order
+Generate Barcode Label
