@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WarehouseManager.Api.Extensions
 {
-    public static class AuthenticationExtension
+    public static class AuthenticationExtensions
     {
         public static IServiceCollection AddJwtAuthentication(
             this IServiceCollection services,

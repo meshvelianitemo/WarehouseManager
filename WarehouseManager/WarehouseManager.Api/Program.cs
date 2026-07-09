@@ -1,11 +1,7 @@
 using DotNetEnv;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
 using WarehouseManager.Api.Extensions;
-using WarehouseManager.Api.Middleware;
 using WarehouseManager.Application;
 using WarehouseManager.Infrastructure;
-using WarehouseManager.Infrastructure.Persistance;
 
 Env.Load();
 
@@ -17,18 +13,13 @@ builder.Configuration
     .AddJsonFile("appsettings.Development.json")
     .AddEnvironmentVariables();
 
-builder.Services.AddPresentation();
-builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration);
+builder.Services.AddPresentation()
+                .AddApplication()
+                .AddInfrastructure(builder.Configuration)
+                .AddJwtAuthentication(builder.Configuration)
+                .AddCorsConfiguration();
 
-builder.Host.UseSerilog((context, config) =>
-    config.ReadFrom.Configuration(context.Configuration));
-
-builder.Services.AddJwtAuthentication(builder.Configuration);
-builder.Services.AddCorsConfiguration();
-
-
+builder.Host.AddSerilogConfiguration();
 
 
 var app = builder.Build();
@@ -39,12 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("AllowAll");
-app.UseSerilogRequestLogging();
-app.UseHttpsRedirection();
-
-app.UseMiddleware<GlobalExceptionHandler>();
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseApplicationMiddleware();
 
 app.MapControllers();
 

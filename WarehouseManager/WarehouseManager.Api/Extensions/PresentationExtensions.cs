@@ -2,7 +2,7 @@
 
 namespace WarehouseManager.Api.Extensions
 {
-    public static class PresentationExtension
+    public static class PresentationExtensions
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services)
         {
