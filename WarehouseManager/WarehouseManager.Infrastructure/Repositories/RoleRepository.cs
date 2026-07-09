@@ -15,11 +15,11 @@ namespace WarehouseManager.Infrastructure.Repositories
         }
         public async Task<RoleName> GetRoleByUserIdAsync(Guid userId)
         {
-            var user = await _context.Users
+            return await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Id == userId);
-            
-            return user!.Role.Name;
+                .Where(u => u.Id == userId)
+                .Select(u => u.Role.Name)
+                .FirstAsync();
         }
     }
 }

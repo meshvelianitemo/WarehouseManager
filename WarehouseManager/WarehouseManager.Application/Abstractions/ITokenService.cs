@@ -6,7 +6,7 @@ namespace WarehouseManager.Application.Abstractions
 {
     public interface ITokenService
     {
-        public Task<string> GenerateTokenAsync(User user);
-        public Task<string> GenerateRefreshTokenAsync(User user);
+        Task<string> GenerateTokenAsync(User user);
+        Task<string> GenerateRefreshTokenAsync(User user);
     }
 }

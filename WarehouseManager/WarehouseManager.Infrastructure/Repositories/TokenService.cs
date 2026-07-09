@@ -54,10 +54,14 @@ namespace WarehouseManager.Infrastructure.Repositories
                 signingCredentials: creds
             );
 
-            _logger.LogInformation($"Token Generated for User {user.FirstName} {user.LastName} with Id of {user.Id}");
+            _logger.LogInformation(
+                 "Token generated for user {FirstName} {LastName} with Id {UserId}",
+                 user.FirstName,
+                 user.LastName,
+                 user.Id);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return await Task.FromResult(jwt);
+            return jwt;
         }
 
 

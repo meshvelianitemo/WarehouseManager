@@ -7,6 +7,6 @@ namespace WarehouseManager.Application.Abstractions
 {
     public interface IRoleRepository
     {
-        public Task<RoleName> GetRoleByUserIdAsync(Guid userId);
+        Task<RoleName> GetRoleByUserIdAsync(Guid userId);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WarehouseManager.Application.Abstractions;
 using WarehouseManager.Infrastructure.Persistance;
+using WarehouseManager.Infrastructure.Repositories;
 
 namespace WarehouseManager.Infrastructure
 {
@@ -14,6 +16,11 @@ namespace WarehouseManager.Infrastructure
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
 
             return services;
         }
