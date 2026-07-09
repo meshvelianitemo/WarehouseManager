@@ -5,7 +5,7 @@ using WarehouseManager.Domain.Entities;
 
 namespace WarehouseManager.Application.Abstractions
 {
-    public interface IAuthRepository
+    public interface IUserRepository
     {
         public Task<Result> AddUser(UserRegistrationDto dto);
     }
