@@ -23,6 +23,7 @@
         public ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new List<PurchaseOrder>();
         public ICollection<SalesOrder> SalesOrders { get; set; } = new List<SalesOrder>();
         public ICollection<Document> Documents { get; set; } = new List<Document>();
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
     }
 }

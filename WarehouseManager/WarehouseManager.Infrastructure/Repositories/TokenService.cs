@@ -9,6 +9,7 @@ using WarehouseManager.Application.Abstractions;
 using WarehouseManager.Application.Features.Login;
 using WarehouseManager.Domain.Entities;
 using WarehouseManager.Domain.Enums;
+using WarehouseManager.Infrastructure.Persistance;
 
 namespace WarehouseManager.Infrastructure.Repositories
 {
@@ -17,16 +18,18 @@ namespace WarehouseManager.Infrastructure.Repositories
         private readonly ILogger<TokenService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IRoleRepository _roleRepository;
-        public TokenService(IRoleRepository roleRepository,ILogger<TokenService> logger, IConfiguration configuration)
+        private readonly WmsDbContext _context;
+        public TokenService(WmsDbContext context,IRoleRepository roleRepository, ILogger<TokenService> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
             _roleRepository = roleRepository;
+            _context = context;
         }
 
         public Task<string> GenerateRefreshTokenAsync(User user)
         {
-            throw new NotImplementedException();
+            var token  = 
         }
 
         public async Task<string> GenerateTokenAsync(User user)
@@ -63,7 +66,6 @@ namespace WarehouseManager.Infrastructure.Repositories
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }
-
 
     }
 }
