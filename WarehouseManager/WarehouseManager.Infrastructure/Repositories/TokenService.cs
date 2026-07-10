@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using WarehouseManager.Application.Abstractions;
 using WarehouseManager.Application.Features.Login;
@@ -18,18 +20,18 @@ namespace WarehouseManager.Infrastructure.Repositories
         private readonly ILogger<TokenService> _logger;
         private readonly IConfiguration _configuration;
         private readonly IRoleRepository _roleRepository;
-        private readonly WmsDbContext _context;
-        public TokenService(WmsDbContext context,IRoleRepository roleRepository, ILogger<TokenService> logger, IConfiguration configuration)
+        public TokenService(IRoleRepository roleRepository, ILogger<TokenService> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
             _roleRepository = roleRepository;
-            _context = context;
         }
 
-        public Task<string> GenerateRefreshTokenAsync(User user)
+        public string GenerateRefreshToken(User user)
         {
-            var token  = 
+            byte[] randomBytes = RandomNumberGenerator.GetBytes(64);
+
+            return Convert.ToBase64String(randomBytes);
         }
 
         public async Task<string> GenerateTokenAsync(User user)
@@ -67,5 +69,16 @@ namespace WarehouseManager.Infrastructure.Repositories
             return jwt;
         }
 
+        public string HashRefreshToken(string token)
+        {
+            byte[] tokenBytes = Encoding.UTF8.GetBytes(token);
+
+            byte[] hashBytes = SHA256.HashData(tokenBytes);
+
+            return Convert.ToHexString(hashBytes);
+        }
+
+
+        
     }
 }
