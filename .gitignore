@@ -91,3 +91,5 @@ HereShouldBe.EnvButWeSkipForPrivateRepo
 # node modules 
 node_modules/
         
+# Claude Code
+CLAUDE.md

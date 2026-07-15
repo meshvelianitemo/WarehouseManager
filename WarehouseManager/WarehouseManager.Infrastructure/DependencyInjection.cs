@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WarehouseManager.Application.Abstractions;
+using WarehouseManager.Domain.Entities;
 using WarehouseManager.Infrastructure.Persistance;
 using WarehouseManager.Infrastructure.Repositories;
 
@@ -21,6 +23,9 @@ namespace WarehouseManager.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+            services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
             return services;
         }

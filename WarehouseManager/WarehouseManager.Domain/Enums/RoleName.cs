@@ -3,6 +3,7 @@ namespace WarehouseManager.Domain.Enums
 {
     public enum RoleName
     {
+        ReadOnly = 0,
         Administration = 1,
         Warehouse = 2,
         InventoryControl = 3,

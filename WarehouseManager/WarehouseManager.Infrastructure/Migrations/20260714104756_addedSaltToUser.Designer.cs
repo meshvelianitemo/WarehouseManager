@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarehouseManager.Infrastructure.Persistance;
 
@@ -11,9 +12,11 @@ using WarehouseManager.Infrastructure.Persistance;
 namespace WarehouseManager.Infrastructure.Migrations
 {
     [DbContext(typeof(WmsDbContext))]
-    partial class WmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260714104756_addedSaltToUser")]
+    partial class addedSaltToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -385,78 +388,6 @@ namespace WarehouseManager.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = 0
-                        },
-                        new
-                        {
-                            Id = new Guid("00000001-0000-0000-0000-000000000000"),
-                            Name = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("00000002-0000-0000-0000-000000000000"),
-                            Name = 2
-                        },
-                        new
-                        {
-                            Id = new Guid("00000003-0000-0000-0000-000000000000"),
-                            Name = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("00000004-0000-0000-0000-000000000000"),
-                            Name = 4
-                        },
-                        new
-                        {
-                            Id = new Guid("00000005-0000-0000-0000-000000000000"),
-                            Name = 5
-                        },
-                        new
-                        {
-                            Id = new Guid("00000006-0000-0000-0000-000000000000"),
-                            Name = 6
-                        },
-                        new
-                        {
-                            Id = new Guid("00000007-0000-0000-0000-000000000000"),
-                            Name = 7
-                        },
-                        new
-                        {
-                            Id = new Guid("00000008-0000-0000-0000-000000000000"),
-                            Name = 8
-                        },
-                        new
-                        {
-                            Id = new Guid("00000009-0000-0000-0000-000000000000"),
-                            Name = 9
-                        },
-                        new
-                        {
-                            Id = new Guid("0000000a-0000-0000-0000-000000000000"),
-                            Name = 10
-                        },
-                        new
-                        {
-                            Id = new Guid("0000000b-0000-0000-0000-000000000000"),
-                            Name = 11
-                        },
-                        new
-                        {
-                            Id = new Guid("0000000c-0000-0000-0000-000000000000"),
-                            Name = 12
-                        },
-                        new
-                        {
-                            Id = new Guid("0000000d-0000-0000-0000-000000000000"),
-                            Name = 13
-                        });
                 });
 
             modelBuilder.Entity("WarehouseManager.Domain.Entities.SalesOrder", b =>

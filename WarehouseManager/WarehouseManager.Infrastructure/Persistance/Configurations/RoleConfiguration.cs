@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WarehouseManager.Domain.Entities;
+using WarehouseManager.Domain.Enums;
 
 namespace WarehouseManager.Infrastructure.Persistance.Configurations
 {
@@ -27,6 +28,20 @@ namespace WarehouseManager.Infrastructure.Persistance.Configurations
                 .WithOne(x => x.Role)
                 .HasForeignKey(x => x.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasData(GetSeedRoles());
         }
+
+        private static IEnumerable<Role> GetSeedRoles()
+        {
+            return Enum.GetValues<RoleName>()
+                .Select(name => new Role
+                {
+                    Id = RoleId(name),
+                    Name = name
+                });
+        }
+        private static Guid RoleId(RoleName name) =>
+            new((int)name, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 }

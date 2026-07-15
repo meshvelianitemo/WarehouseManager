@@ -1,6 +1,5 @@
 ﻿
 using System.Runtime.CompilerServices;
-using WarehouseManager.Application.Features.Login;
 using WarehouseManager.Domain.Entities;
 
 namespace WarehouseManager.Application.Abstractions

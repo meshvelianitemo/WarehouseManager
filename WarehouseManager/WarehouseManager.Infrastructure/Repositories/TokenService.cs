@@ -8,7 +8,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using WarehouseManager.Application.Abstractions;
-using WarehouseManager.Application.Features.Login;
 using WarehouseManager.Domain.Entities;
 using WarehouseManager.Domain.Enums;
 using WarehouseManager.Infrastructure.Persistance;

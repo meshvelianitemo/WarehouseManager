@@ -13,6 +13,15 @@ namespace WarehouseManager.Infrastructure.Repositories
         {
             _context = context;
         }
+
+        public async Task<Guid> GetGuid(RoleName roleName)
+        {
+            return await _context.Roles
+                .Where(x => x.Name == roleName)
+                .Select(x => x.Id)
+                .FirstAsync();
+        }
+
         public async Task<RoleName> GetRoleByUserIdAsync(Guid userId)
         {
             return await _context.Users
@@ -21,5 +30,6 @@ namespace WarehouseManager.Infrastructure.Repositories
                 .Select(u => u.Role.Name)
                 .FirstAsync();
         }
+
     }
 }
