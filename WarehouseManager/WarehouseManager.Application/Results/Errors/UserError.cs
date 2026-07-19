@@ -6,6 +6,9 @@ namespace WarehouseManager.Application.Results.Errors
     public static class UserError
     {
         public static readonly Error EmailInUse =
-            new("User.EmailInUse", "Email is already Used!", "Users");
+            new(ErrorCode.Conflict, "Email is already Used!", "Users");
+
+        public static readonly Error RoleNotFound =
+            new(ErrorCode.NotFound, "Role was not found!", "Users");
     }
 }

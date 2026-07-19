@@ -14,12 +14,12 @@ namespace WarehouseManager.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Guid> GetGuid(RoleName roleName)
+        public async Task<Guid?> GetGuid(RoleName roleName)
         {
             return await _context.Roles
                 .Where(x => x.Name == roleName)
-                .Select(x => x.Id)
-                .FirstAsync();
+                .Select(x => (Guid?)x.Id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<RoleName> GetRoleByUserIdAsync(Guid userId)

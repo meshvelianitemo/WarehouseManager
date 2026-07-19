@@ -41,8 +41,13 @@ namespace WarehouseManager.Application.Features.Commands.Register
 
             var user = RegisterMapping.ToEntity(dto);
 
-            user.RoleId = await _roleRepository
+            var roleId = await _roleRepository
                 .GetGuid(RoleName.ReadOnly);
+
+            if (roleId is null)
+                return Result<Guid>.Failure(UserError.RoleNotFound);
+
+            user.RoleId = roleId.Value;
 
             user.PasswordHash = _passwordHasher
                 .HashPassword(user, dto.Password);

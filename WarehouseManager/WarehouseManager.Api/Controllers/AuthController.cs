@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Identity.Data;
+using WarehouseManager.Application.Features.Commands.Register;
+using WarehouseManager.Application.Features.Commands.Register.DTOs;
 
 namespace WarehouseManager.Api.Controllers
 {
@@ -17,10 +20,12 @@ namespace WarehouseManager.Api.Controllers
             _logger = logger;
         }
         [HttpPost("Register")]
-        public async Task<IActionResult> Register()
+        public async Task<IActionResult> Register(RegisterDto request
+            ,CancellationToken cancellationToken)
         {
-            _logger.LogInformation("hello shithead!");
-            return Ok();
+            var result = await _sender
+                .Send(new RegisterCommand(request), cancellationToken);
+            return this.ToActionResult(result);
         }
     }
 }

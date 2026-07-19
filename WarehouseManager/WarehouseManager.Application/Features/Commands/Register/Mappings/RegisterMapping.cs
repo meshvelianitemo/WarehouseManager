@@ -6,10 +6,6 @@ namespace WarehouseManager.Application.Features.Commands.Register.Mappings
 {
     public static class RegisterMapping
     {
-        /// <summary>
-        /// Maps the request fields only. PasswordHash is set by the handler after hashing,
-        /// because the hasher needs the User instance this method returns.
-        /// </summary>
         public static User ToEntity(this RegisterDto dto)
         {
             return new User
