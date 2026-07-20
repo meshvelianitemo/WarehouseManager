@@ -16,15 +16,16 @@
 
 services:
   seq:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # Seq is prebuilt vendor software — pull it straight from Docker Hub
+    # instead of building a Dockerfile. (The Dockerfile now builds the API.)
+    image: datalust/seq:latest
     container_name: seq-ecommerce-dev
     restart: unless-stopped
 
     environment:
       - ACCEPT_EULA=Y
-      - SEQ_FIRSTRUN_ADMINPASSWORD=DevPassword123!
+      # Value comes from the root .env file (SEQ_ADMIN_PASSWORD).
+      - SEQ_FIRSTRUN_ADMINPASSWORD=${SEQ_ADMIN_PASSWORD}
 
     ports:
       # Web UI — open http://localhost:5341 in your browser
@@ -46,11 +47,85 @@ services:
       start_period: 20s
       retries: 3
 
+  # ----------------------------------------------------------
+  #  WarehouseManager API
+  #  Built from the multi-stage Dockerfile at the git root.
+  #  On startup it applies EF Core migrations against the
+  #  sqlserver service (retrying until it's ready), then serves
+  #  Swagger and logs to Seq.
+  # ----------------------------------------------------------
+  api:
+    build:
+      context: .              # git root — matches the Dockerfile's COPY paths
+      dockerfile: Dockerfile
+    container_name: wms-api
+    restart: unless-stopped
+
+    depends_on:
+      # Start order only — "started" ≠ "ready to accept connections".
+      # The API's migration retry loop handles SQL Server's warm-up.
+      - seq
+      - sqlserver
+
+    environment:
+      # Turns on Swagger (Program.cs guards it behind IsDevelopment()).
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Listen on all interfaces, port 8080, inside the container.
+      - ASPNETCORE_URLS=http://+:8080
+      # Override the Serilog Seq URL from appsettings. Inside a container
+      # "localhost" is the container itself — so we reach Seq by its SERVICE
+      # NAME over the compose network. `__` = nested config key; `0` = first
+      # item in the WriteTo array.
+      - Serilog__WriteTo__0__Args__serverUrl=http://seq:80
+      # Point EF Core at the SQL Server container. Host = the service name
+      # "sqlserver". Password comes from the same .env variable as the
+      # SQL Server container, so the two can never drift apart.
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=WarehouseManager;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true;
+
+    ports:
+      # host:container — browse to http://localhost:8080/swagger
+      - "8080:8080"
+
+    networks:
+      - ecommerce-dev
+
+  # ----------------------------------------------------------
+  #  SQL Server 2022 — the database the API migrates & queries.
+  #  Note: needs ~2 GB RAM. First boot takes 20-40s to warm up,
+  #  which is exactly why the API retries its migration.
+  # ----------------------------------------------------------
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: wms-sqlserver
+    restart: unless-stopped
+
+    environment:
+      - ACCEPT_EULA=Y
+      # Value comes from the root .env file. The `:?` guard makes compose
+      # abort with a clear error if it's unset, instead of silently starting
+      # SQL Server with a blank password (which would just fail).
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}
+      - MSSQL_PID=Developer
+
+    ports:
+      # Exposes SQL Server on the host too, so you can connect with SSMS /
+      # Azure Data Studio at localhost,1433 (sa / Warehouse_Dev_2026!).
+      - "1433:1433"
+
+    volumes:
+      # Named volume so your database survives container restarts.
+      - sql_data:/var/opt/mssql
+
+    networks:
+      - ecommerce-dev
+
 # -------------------------------------------------------
-#  Persist log data across restarts
+#  Persist data across restarts
 # -------------------------------------------------------
 volumes:
   seq_data:
+    driver: local
+  sql_data:
     driver: local
 
 # -------------------------------------------------------

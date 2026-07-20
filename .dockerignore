@@ -1,0 +1,24 @@
+# Keep the Docker build context small and clean.
+# Anything listed here is NOT sent to the Docker daemon during a build,
+# so it can't be COPY'd in and won't invalidate build cache.
+
+# Build outputs — we rebuild these inside the image; shipping the host's
+# copies would be stale and could break the containerized build.
+**/bin/
+**/obj/
+
+# IDE / VCS noise
+**/.vs/
+.git/
+.github/
+**/*.user
+
+# Secrets & local env — never bake these into an image
+.env
+*.env
+
+# Docker + docs don't belong in the build
+Dockerfile
+.dockerignore
+docker-compose.yml
+*.md
