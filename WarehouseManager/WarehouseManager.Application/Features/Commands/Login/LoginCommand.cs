@@ -5,7 +5,7 @@ using WarehouseManager.Application.Results;
 
 namespace WarehouseManager.Application.Features.Commands.Login
 {
-    public class LoginCommand : IRequest<Result<string>>
+    public class LoginCommand : IRequest<Result<AuthResponse>>
     {
         public LoginDto Dto { get; }
 

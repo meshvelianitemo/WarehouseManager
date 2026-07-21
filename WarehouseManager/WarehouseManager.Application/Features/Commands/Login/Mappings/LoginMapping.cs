@@ -8,16 +8,7 @@ namespace WarehouseManager.Application.Features.Commands.Login.Mappings
     {
         public static LoginDto ToLoginDto(this User user)
         {
-            return new LoginDto
-            {
-                UserId = user.Id,
-                RoleId = user.RoleId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                PasswordHash = user.PasswordHash,
-                Salt = user.Salt
-            };
+            throw new NotImplementedException();
         }
     }
 }
