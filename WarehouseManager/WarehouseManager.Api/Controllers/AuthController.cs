@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity.Data;
 using WarehouseManager.Application.Features.Commands.Register;
 using WarehouseManager.Application.Features.Commands.Register.DTOs;
+using WarehouseManager.Application.Features.Commands.Login;
+using WarehouseManager.Application.Features.Commands.Login.DTOs;
 
 namespace WarehouseManager.Api.Controllers
 {
@@ -27,6 +29,23 @@ namespace WarehouseManager.Api.Controllers
                 .Send(new RegisterCommand(request), cancellationToken);
             return this.ToActionResult(result);
         }
-    }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginDto request
+            , CancellationToken cancellationToken)
+        {
+            var result = await _sender
+                .Send(new LoginCommand(request), cancellationToken);
+            return this.ToActionResult(result);
+        }
+
+        [HttpPost("RefreshTokens")]
+        public async Task<IActionResult> RefreshTokens(string refreshToken
+            , CancellationToken cancellationToken)
+        {
+            var result = await _sender
+                .Send(new RefreshTokensCommand(refreshToken), cancellationToken);
+            return this.ToActionResult(result);
+        }
 }
     
