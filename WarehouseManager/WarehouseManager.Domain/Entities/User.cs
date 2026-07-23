@@ -12,6 +12,8 @@
 
         public string PasswordHash { get; set; } = string.Empty;
 
+        public bool IsActive { get; set; } = true;
+
         public string Salt { get; set;  } = string.Empty;
 
         public DateTime CreatedAt { get; set; }

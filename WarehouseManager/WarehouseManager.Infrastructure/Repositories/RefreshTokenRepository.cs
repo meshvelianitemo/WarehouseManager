@@ -2,10 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using WarehouseManager.Application.Abstractions;
 using WarehouseManager.Domain.Entities;
 using WarehouseManager.Domain.Enums;
@@ -32,7 +28,8 @@ namespace WarehouseManager.Infrastructure.Repositories
                 TokenHash = tokenHash,
                 ExpiresAt = DateTime.UtcNow.AddDays(20),
                 RevokedAt = null,
-                UserId = user.Id
+                UserId = user.Id, 
+                CreatedAt = DateTime.UtcNow
             };
             await _context.RefreshTokens.AddAsync(refreshToken);
 
@@ -57,7 +54,8 @@ namespace WarehouseManager.Infrastructure.Repositories
         public async Task<RefreshToken?> GetByHashAsync(string tokenHash)
         {
            return await _context.RefreshTokens
-                 .FirstOrDefaultAsync(r => r.TokenHash == tokenHash);
+                .Include(x=> x.User)
+                .FirstOrDefaultAsync(r => r.TokenHash == tokenHash);
         }
 
         public async Task<List<RefreshToken>> GetUserRefreshTokensAsync(Guid userId)

@@ -7,6 +7,7 @@ using WarehouseManager.Application.Features.Commands.Register;
 using WarehouseManager.Application.Features.Commands.Register.DTOs;
 using WarehouseManager.Application.Features.Commands.Login;
 using WarehouseManager.Application.Features.Commands.Login.DTOs;
+using WarehouseManager.Application.Features.Commands.Refresh;
 
 namespace WarehouseManager.Api.Controllers
 {
@@ -23,7 +24,7 @@ namespace WarehouseManager.Api.Controllers
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterDto request
-            ,CancellationToken cancellationToken)
+            , CancellationToken cancellationToken)
         {
             var result = await _sender
                 .Send(new RegisterCommand(request), cancellationToken);
@@ -39,13 +40,14 @@ namespace WarehouseManager.Api.Controllers
             return this.ToActionResult(result);
         }
 
-        [HttpPost("RefreshTokens")]
-        public async Task<IActionResult> RefreshTokens(string refreshToken
+        [HttpPost("Refresh")]
+        public async Task<IActionResult> Refresh([FromBody] string refreshToken
             , CancellationToken cancellationToken)
         {
             var result = await _sender
-                .Send(new RefreshTokensCommand(refreshToken), cancellationToken);
+                .Send(new RefreshCommand(refreshToken), cancellationToken);
             return this.ToActionResult(result);
         }
+    }
 }
     
