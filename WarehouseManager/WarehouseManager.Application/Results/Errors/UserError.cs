@@ -18,7 +18,7 @@ namespace WarehouseManager.Application.Results.Errors
             new(ErrorCode.Unauthorized, "User was not found!", "Users");
 
         public static readonly Error InvalidRefreshToken =
-            new(ErrorCode.Unauthorized, "Invalid refresh token!", "Users");
+            new(ErrorCode.Forbidden, "Invalid refresh token!", "Users");
 
         public static readonly Error UserNotActive =
             new(ErrorCode.Unauthorized, "User is not active!", "Users");

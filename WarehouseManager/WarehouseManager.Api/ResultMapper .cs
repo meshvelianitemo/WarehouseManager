@@ -60,5 +60,27 @@ namespace WarehouseManager.Api
                 _ => controller.StatusCode(StatusCodes.Status500InternalServerError, response)
             };
         }
+
+        public static IActionResult ToActionResult(
+            this ControllerBase controller,
+            Result result)
+        {
+            if (result.IsSuccess)
+                return controller.NoContent();
+
+            var response = new ErrorResponse
+            {
+                Code = result.Error.Code,
+                Message = result.Error.Message,
+                Field = result.Error.Field
+            };
+
+            return result.Error.Code switch
+            {
+                ErrorCode.Validation => controller.BadRequest(response),
+                // ...
+                _ => controller.StatusCode(500, response)
+            };
+        }
     }
 }
